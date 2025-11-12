@@ -4,7 +4,15 @@ import vike from 'vike/plugin';
 import {defineConfig} from 'vite';
 
 export default defineConfig({
-  plugins: [vike(), react(), tailwindcss()],
+  plugins: [
+    vike(),
+    react({
+      babel: {
+        plugins: [["babel-plugin-react-compiler", { target: "19" }]],
+      },
+    }),
+    tailwindcss(),
+  ],
 
   resolve: {
     alias: {
