@@ -1,3 +1,4 @@
+import {usePopup} from '../../components/popup/usePopup';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import {useInput} from '../../components/input/useInput';
@@ -5,6 +6,7 @@ import SearchInput from '../../components/search/Search';
 import {useSearch} from '../../components/search/useSearch';
 
 export default function Page() {
+  // const {form} = usePopup();
   const nameInput = useInput({
     // 인풋 예시입니다
     initialValue: '',
@@ -67,6 +69,26 @@ export default function Page() {
       />
 
       {/* Modal  */}
+      {/* <Button
+        className="h-12 rounded-4xl"
+        onClick={() => {
+          form<{name: string; age: number}>({
+            header: {title: '신청하기 전에', close: true},
+            form: (
+              <>
+                <label>이름</label>
+                <input name="name" className="border p-2 w-full mb-4" />
+
+                <label>나이</label>
+                <input name="age" className="border p-2 w-full" />
+              </>
+            ),
+            onSubmit: data => console.log(data),
+          });
+        }}
+      >
+        신청하기
+      </Button> */}
 
       {/* Dropdown */}
     </>

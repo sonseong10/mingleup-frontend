@@ -4,6 +4,7 @@ import '../styles/index.scss';
 import './tailwind.css';
 import logoUrl from '../assets/logo.svg';
 import {Link} from '../components/Link';
+import PopupComponent from '../components/popup/Popup';
 
 export default function Layout({children}: {children: React.ReactNode}) {
   return (
@@ -15,6 +16,8 @@ export default function Layout({children}: {children: React.ReactNode}) {
         <Link href="/star-wars">Data Fetching</Link>
       </Sidebar>
       <Content>{children}</Content>
+
+      <PopupComponent />
     </div>
   );
 }
