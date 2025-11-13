@@ -25,9 +25,10 @@
     ]
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "src/*/"
   ],
   "exclude": [
     "dist"
-  ],
+  ]
 }
