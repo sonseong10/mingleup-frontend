@@ -9,10 +9,6 @@
       "DOM.Iterable",
       "ESNext"
     ],
-    "types": [
-      "vite/client",
-      "vike-react"
-    ],
     "allowJs": true,
     "noEmit": true,
     "skipLibCheck": true,
@@ -25,6 +21,9 @@
       ]
     }
   },
+  "include": [
+    "src/*/"
+  ],
   "exclude": [
     "dist"
   ]
