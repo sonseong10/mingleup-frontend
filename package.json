@@ -23,6 +23,7 @@
     "vike-react": "^0.6.12"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.28.5",
     "@eslint/js": "^9.39.1",
     "@tailwindcss/vite": "^4.1.17",
     "@types/react": "^19.2.4",
