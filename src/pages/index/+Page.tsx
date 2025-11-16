@@ -4,6 +4,13 @@ import Button from '../../components/button/Button';
 import {useInput} from '../../components/input/useInput';
 import SearchInput from '../../components/search/Search';
 import {useSearch} from '../../components/search/useSearch';
+<<<<<<< HEAD
+=======
+
+interface ConfirmData {
+  userName: string;
+}
+>>>>>>> a9ef791 (feat: 검색창 컴포넌트 생성 완료)
 
 export default function Page() {
   const {form} = usePopup();
