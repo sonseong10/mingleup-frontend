@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {usePopup} from '../../components/popup/usePopup';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
@@ -11,6 +12,9 @@ interface ConfirmData {
   userName: string;
 }
 >>>>>>> a9ef791 (feat: 검색창 컴포넌트 생성 완료)
+=======
+import Button from '../../components/button/Button';
+>>>>>>> 8cb216e (feat: 버튼 컴포넌트 생성 완료)
 
 export default function Page() {
 <<<<<<< HEAD
@@ -47,7 +51,13 @@ export default function Page() {
       {/* TODO: 1주차 프론트 팀미션 UI 컴포넌트 만들기  */}
 
       {/* Button/Input  */}
+<<<<<<< HEAD
       <Button
+=======
+      {/* 활성화 버튼 */}
+      <Button
+        className="py-3 text-base"
+>>>>>>> 8cb216e (feat: 버튼 컴포넌트 생성 완료)
         onClick={() => {
           console.log('제출 버튼 클릭');
         }}
@@ -55,7 +65,13 @@ export default function Page() {
         제출_활성화버튼
       </Button>
 
+<<<<<<< HEAD
       <Button
+=======
+      {/* 비활성화 버튼 */}
+      <Button
+        className="py-3 text-base"
+>>>>>>> 8cb216e (feat: 버튼 컴포넌트 생성 완료)
         disabled
         onClick={() => {
           console.log('이 코드는 disabled라 실행되지 않음');
@@ -63,6 +79,7 @@ export default function Page() {
       >
         제출_비활성화버튼
       </Button>
+<<<<<<< HEAD
 
       <Input placeholder="닉네임" className="px-4 py-2 text-base" {...nameInput.bind} />
       {nameInput.error && <p className="text-sm text-red-500">{nameInput.error}</p>}
@@ -79,6 +96,8 @@ export default function Page() {
         inputClassName="text-[13px]" // 필요하면 여기서 글자 크기/패딩 조절
         {...search.bindInput}
       />
+=======
+>>>>>>> 8cb216e (feat: 버튼 컴포넌트 생성 완료)
 
       {/* Modal  */}
       <Button
