@@ -12,8 +12,8 @@ export default {
 
   // https://vike.dev/head-tags
   title: 'MingleUp',
-
-  description: 'Demo showcasing Vike',
+  lang: 'ko',
+  description: '일상속 자연스러운 만남, 당신의 리듬에 맞춘 MingleUp',
   extends: [vikeReact, vikePhoton],
   prerender: true,
 } satisfies Config;
