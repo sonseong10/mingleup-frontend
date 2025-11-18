@@ -1,26 +1,36 @@
+import {ReactNode} from 'react';
 import {usePopupStore} from '../../store/popupStore';
-import type {PopupType, PopupProps} from './AbsPopup';
-import type {FooterFor} from '../../store/popupStore';
+import {AlertPopup, ConfirmPopup, CustomPopup, FormPopup, PopupOption} from './types/popup';
 
-/**
- * usePopup 훅
- */
-export function usePopup(): {
-  openPopup: <T extends PopupType, R = unknown>(
-    type: T,
-    props: PopupProps<R> & {footer: FooterFor<T>}
-  ) => Promise<{ok: boolean; data?: R}>;
-  closePopup: <R = unknown>(data?: R) => void;
-} {
-  const {open, close} = usePopupStore();
+export function usePopup() {
+  const setPopup = usePopupStore(s => s.setPopup);
 
-  function openPopup<T extends PopupType, R = unknown>(type: T, props: PopupProps<R> & {footer: FooterFor<T>}) {
-    return open(type, props as unknown as PopupProps<unknown>) as Promise<{ok: boolean; data?: R}>;
-  }
+  return {
+    // Alert dialog
+    alert: (option: Omit<AlertPopup, 'type'>) => setPopup({...option, type: 'alert'}),
 
-  function closePopup<R = unknown>(data?: R) {
-    close(data as unknown);
-  }
+    // Confirm dialog
+    confirm: (option: Omit<ConfirmPopup, 'type'>) => setPopup({...option, type: 'confirm'}),
 
-  return {openPopup, closePopup};
+    // Form dialog
+    form<T>(option: Omit<FormPopup<T>, 'type'>) {
+      const popup: FormPopup<T> = {
+        ...option,
+        type: 'form',
+      };
+      setPopup(popup);
+    },
+
+    // Custom UI
+    custom: (node: ReactNode) => {
+      const popup: CustomPopup = {
+        type: 'custom',
+        node,
+      };
+      setPopup(popup);
+    },
+
+    // Close
+    close: () => setPopup(null as PopupOption | null),
+  };
 }
