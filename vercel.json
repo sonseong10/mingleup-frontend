@@ -1,0 +1,14 @@
+{
+  "version": 3,
+  "framework": null,
+  "routes": [
+    {
+      "src": "/assets/(.*)",
+      "dest": "/client/assets/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "server/index.mjs"
+    }
+  ]
+}
