@@ -4,9 +4,13 @@ import Button from '../../components/button/Button';
 import {useInput} from '../../components/input/useInput';
 import SearchInput from '../../components/search/Search';
 import {useSearch} from '../../components/search/useSearch';
+import Dropdown from '../../components/dropdown/Dropdown';
+import {useDropdown} from '../../components/dropdown/useDropdown';
 
 export default function Page() {
   const {form} = usePopup();
+  const dropdown = useDropdown();
+
   const nameInput = useInput({
     // 인풋 예시입니다
     initialValue: '',
@@ -27,6 +31,12 @@ export default function Page() {
       // 여기서 API 호출 같은 거 하면 됨
     },
   });
+
+  const OPTIONS = [
+    {label: '옵션 1', value: 'opt1'},
+    {label: '옵션 2', value: 'opt2'},
+    {label: '옵션 3', value: 'opt3'},
+  ];
 
   return (
     <>
@@ -91,6 +101,15 @@ export default function Page() {
       </Button>
 
       {/* Dropdown */}
+      <Dropdown
+        options={OPTIONS}
+        placeholder="옵션을 선택해주세요"
+        wrapperClassName="w-[240px]"
+        buttonClassName="w-full px-4 py-2"
+        optionListClassName="w-full"
+        optionClassName="w-full"
+        {...dropdown.bind}
+      />
     </>
   );
 }
