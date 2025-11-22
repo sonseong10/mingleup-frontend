@@ -64,7 +64,7 @@ function Header() {
         </div>
 
         <div>
-          <Link href="/member">로그인</Link>
+          <Link href="/login">로그인</Link>
         </div>
       </header>
     </div>
