@@ -60,7 +60,7 @@ function Header() {
           <Logo />
 
           {/* GNB */}
-          <Link href="/">파티</Link>
+          <Link href="/party">파티</Link>
         </div>
 
         <div>
