@@ -45,7 +45,7 @@ function Header() {
 function Content({children}: {children: React.ReactNode}) {
   return (
     <div id="page-container">
-      <main id="page-content" className="pt-20 pb-12 min-h-screen container">
+      <main id="page-content" className="pt-20 min-h-screen">
         {children}
       </main>
     </div>

@@ -1,117 +1,58 @@
-import {usePopup} from '../../components/popup/usePopup';
-import Input from '../../components/input/Input';
-import Button from '../../components/button/Button';
-import {useInput} from '../../components/input/useInput';
-import SearchInput from '../../components/search/Search';
-import {useSearch} from '../../components/search/useSearch';
-import Dropdown from '../../components/dropdown/Dropdown';
-import {useDropdown} from '../../components/dropdown/useDropdown';
+import heroBanner from '../../assets/images/mainbanner.png';
+import banner from '../../assets/images/banner.png';
+import PartyList from '../party/components/PartyList';
 
 export default function Page() {
-  const {form} = usePopup();
-  const dropdown = useDropdown();
-
-  const nameInput = useInput({
-    // 인풋 예시입니다
-    initialValue: '',
-    validate: value => (value.trim().length === 0 ? '닉네임을 입력해주세요.' : null),
-  });
-
-  const bioInput = useInput({
-    // 인풋 예시입니다
-    initialValue: '',
-    validate: value => (value.length > 200 ? '200자 이내로 입력해주세요.' : null),
-  });
-
-  const search = useSearch({
-    // 검색창 예시입니다
-    initialKeyword: '',
-    async onSearch(keyword) {
-      console.log('검색 실행:', keyword);
-      // 여기서 API 호출 같은 거 하면 됨
-    },
-  });
-
-  const OPTIONS = [
-    {label: '옵션 1', value: 'opt1'},
-    {label: '옵션 2', value: 'opt2'},
-    {label: '옵션 3', value: 'opt3'},
-  ];
-
   return (
     <>
-      <h1 className={'font-bold text-3xl pb-4'}>1주차 멘토링 과제</h1>
+      <div id="banner" className="w-full flex flex-col items-center bg-[#F9F5F6]">
+        <div className="container flex items-center justify-around">
+          <div>
+            <p className="text-lg md:text-4xl md:mb-4">
+              자연스러운 만남,
+              <br /> 당신의 리듬에 맞춘 <span className="text-[#F2BED1]">MingleUp</span>
+            </p>
+            <p className="hidden md:block text-[#787878]">
+              MingleUp은 AI가 당신의 취향과 성향에 맞는 사람들과 어울릴 수 있는 파티를 만들어드립니다.
+            </p>
+          </div>
 
-      {/* TODO: 1주차 프론트 팀미션 UI 컴포넌트 만들기  */}
+          <div className="w-40 md:w-94">
+            <img src={heroBanner} alt="배너이미지" />
+          </div>
+        </div>
+      </div>
 
-      {/* Button/Input  */}
-      <Button
-        onClick={() => {
-          console.log('제출 버튼 클릭');
-        }}
-      >
-        제출_활성화버튼
-      </Button>
+      <div className="mb-10">
+        <a href="/party">
+          <img src={banner} alt="크리스마스 파티 더보기" />
+        </a>
+      </div>
 
-      <Button
-        disabled
-        onClick={() => {
-          console.log('이 코드는 disabled라 실행되지 않음');
-        }}
-      >
-        제출_비활성화버튼
-      </Button>
+      <section className="container">
+        <div className="mb-10">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">MingleUp에서 추천하는 파티</h2>
 
-      <Input placeholder="닉네임" className="px-4 py-2 text-base" {...nameInput.bind} />
-      {nameInput.error && <p className="text-sm text-red-500">{nameInput.error}</p>}
+            <a href="/party" className="px-7 py-3.5 flex justify-between gap-3">
+              파티 더보기
+              <i
+                aria-hidden
+                className="block w-5 h-5 bg-no-repeat"
+                style={{
+                  backgroundImage: `url(
+                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Crect width='20' height='20' fill='url(%23pattern0_229_1371)'/%3E%3Cdefs%3E%3Cpattern id='pattern0_229_1371' patternContentUnits='objectBoundingBox' width='1' height='1'%3E%3Cuse xlink:href='%23image0_229_1371' transform='scale(0.01)'/%3E%3C/pattern%3E%3Cimage id='image0_229_1371' width='100' height='100' preserveAspectRatio='none' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAABzklEQVR4nO3cv0tWURzH8Xc/LCiUIhqahDbHwDl0q2ipxVoa/Af8CxxbWloEFwe3BgehwcHJIYgGCQIJCgIhSF3CIaHMHzxwB7kdx4fvN77vF5zxwgc+POc+955zLkiSJEmSJEmSJEmSJEmSJEnS/+UxsAPsAc+iwwi2gZNu/AWeRweq7tuZQgbjEHgSHaqyR8CfXim/gYfRwSp72v0yzpZyAExHB6vsBXDUK+UXcD86WGWzwHGvlH1gMjpYZXO9QgbjJ3AvOlhl841SdoGJ6GCVvWyU8h24Gx2ssleNUgYPkuPRwaq6ACw2SvkC3IkOV7mUpUYpn4Bb0eGqugS8aZTyEbgZHa6qEeBto5T3wGh0uKquAGuNUt4B16PDVXUN2GiUsg5cjQ5X1RjwoVHKaje1KcANYLNRygpwOSKQ4Daw1ShlGbh43kVTwNfGRQ6GOha6Z5h/fE4Q7qToeG0h5C/EKYtcU5aS3dQ1HP7tTcQHw0R8dZKILxcT8fV7Ii5QJeISbiJuckjGbUCJuFEuEbeSJuJm60Q8jpCIB3YS8UhbIg889JlLf4nbY9GJCvHDAQlMdx8P+AHMRIeRJEmSJEmSJEmSJEmSJEmSxFCdAhjDTCMCd9AjAAAAAElFTkSuQmCC'/%3E%3C/defs%3E%3C/svg%3E"
+                  )`,
+                }}
+              ></i>
+            </a>
+          </div>
 
-      <Input
-        multiline
-        placeholder="자기소개를 입력하세요"
-        className="px-4 py-3 text-sm min-h-[120px]"
-        {...bioInput.bind}
-      />
-
-      <SearchInput
-        wrapperClassName="mb-4"
-        inputClassName="text-[13px]" // 필요하면 여기서 글자 크기/패딩 조절
-        {...search.bindInput}
-      />
-
-      {/* Modal  */}
-      <Button
-        className="h-12 rounded-4xl"
-        onClick={() => {
-          form<{name: string; age: number}>({
-            header: {title: '신청하기 전에', close: true},
-            form: (
-              <>
-                <label>이름</label>
-                <input name="name" className="border p-2 w-full mb-4" />
-
-                <label>나이</label>
-                <input name="age" className="border p-2 w-full" />
-              </>
-            ),
-            onSubmit: data => console.log(data),
-          });
-        }}
-      >
-        신청하기
-      </Button>
-
-      {/* Dropdown */}
-      <Dropdown
-        options={OPTIONS}
-        placeholder="옵션을 선택해주세요"
-        customStyle={{
-          wrapperClassName: 'w-[240px]',
-          buttonClassName: 'w-full', // padding은 컴포넌트에서 이미 px-25/py-20
-          optionListClassName: 'w-full',
-          optionClassName: 'w-full',
-        }}
-        {...dropdown.bind}
-      />
+          <div>
+            <PartyList />
+          </div>
+        </div>
+      </section>
     </>
   );
 }
