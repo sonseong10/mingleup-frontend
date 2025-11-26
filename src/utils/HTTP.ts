@@ -35,7 +35,6 @@ const Http: AxiosInstance = axios.create({
     'Cache-Control': 'no-cache',
     'Content-Type': 'application/json',
     Accept: 'application/hal+json',
-    'Access-Control-Allow-Origin': '*',
   },
   paramsSerializer: {
     encode: encodeURIComponent,

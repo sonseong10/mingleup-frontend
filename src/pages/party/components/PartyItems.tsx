@@ -10,11 +10,11 @@ export interface IPartyProps {
 }
 
 function PartyItem({party}: IPartyProps) {
-  const {area, title, category, partyImageUrl, status} = party;
+  const {area, title, category, partyImageUrl, status, partyId} = party;
 
   return (
     <li className="bg-white overflow-hidden flex flex-col">
-      <a href="#" className="relative">
+      <a href={`/party/${partyId}`} className="relative">
         <div className="mb-3 rounded-lg overflow-hidden">
           <img src={partyImageUrl} alt={title} className="block w-full object-cover" />
         </div>

@@ -52,7 +52,7 @@ export const partyData = [
 // 3초 지연 fetch
 function fetchParties() {
   return new Promise<typeof partyData>(resolve => {
-    setTimeout(() => resolve(partyData), 2000);
+    setTimeout(() => resolve(partyData), 1000);
   });
 }
 
