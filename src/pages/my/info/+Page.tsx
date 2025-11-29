@@ -80,7 +80,7 @@ function Mypage() {
         return null;
       }
 
-      return await res;
+      return res;
     } catch (err) {
       console.error('Fetch error:', err);
       return null;

@@ -1,10 +1,36 @@
+import {useState} from 'react';
 import Button from '../../../components/button/Button';
 import {usePageContext} from 'vike-react/usePageContext';
+import Http from '../../../utils/HTTP';
 
 function PartyAccession() {
+  const [answer, setAnswer] = useState<string>('');
   const {party} = usePageContext();
 
-  console.log(party);
+  // console.log(party);
+
+  const onPartyAccession = async () => {
+    if (typeof window === 'undefined') return null; // 서버에서는 실행하지 않음
+
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    try {
+      const res = await Http.post(
+        `parties/${party.partyId}/applications`,
+        {
+          answer: '분위기 좋게 함께 즐기고 싶어요!',
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log(res);
+    } catch (error) {}
+  };
 
   return (
     <>
@@ -60,9 +86,12 @@ function PartyAccession() {
               id="hostAnswer"
               className="resize-none border border-gray-300 rounded-2xl w-full min-h-80 p-4 mb-6"
               placeholder="최소 5글자 이상 답변을 작성해 주세요."
+              onChange={e => {
+                setAnswer(e.target.value);
+              }}
             ></textarea>
 
-            <Button style={{padding: '12px 10px'}} disabled>
+            <Button style={{padding: '12px 10px'}} disabled={answer.trim().length < 5} onClick={onPartyAccession}>
               신청하기
             </Button>
           </div>
