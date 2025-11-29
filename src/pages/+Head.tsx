@@ -12,7 +12,7 @@ export default function HeadDefault() {
       <meta name="keywords" />
       <meta name="robots" content="index,follow" />
       <meta name="keywords" content="MingleUp, Dating, Party, 밍글업, 데이팅, 이색만남"></meta>
-      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"></meta>
+      {/* <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"></meta> */}
 
       {/* pwa */}
       {/* <meta name="theme-color" content="#F2BED1" />
