@@ -1,4 +1,6 @@
 import {Activity, useEffect, useRef, useState} from 'react';
+import {useData} from 'vike-react/useData';
+import type {Data} from './+data.js';
 
 const TABS = [
   {id: 'info', label: '정보'},
@@ -48,19 +50,25 @@ function Tabs({tabs, activeTab, onClick, tabRef}: TabsProps) {
   );
 }
 
-function StickyApplyBox() {
+function StickyApplyBox({party}: {party: Data['party']}) {
   return (
     <aside className="sticky hidden md:block top-22 h-fit">
       <h2 className="sr-only">파티 신청하기 영역</h2>
 
       <div className="flex flex-col">
-        <div className="mb-4">
-          <span className="px-3.5 py-1.5 bg-[#FDCEDF] text-[#F9027A] rounded-xl text-xs">추천</span>
+        <div className="flex mb-4 gap-2 items-center">
+          {party.tags.map((tag, index) => (
+            <span key={index} className="px-3.5 py-1.5 bg-[#FDCEDF] text-[#F9027A] rounded-xl text-xs">
+              #{tag}
+            </span>
+          ))}
         </div>
 
         <div className="flex flex-col mb-4">
-          <strong className="mb-2 text-2xl font-normal">100% 익명보장 즉석만남 소개팅</strong>
-          <span className="text-stone-500 ">강남구 · 커뮤니티 25.11.1(토) 오후 18:00</span>
+          <strong className="mb-2 text-2xl font-normal">{party.title}</strong>
+          <span className="text-stone-500 ">
+            {party.locationName} · {new Date(party.partyDatetime).toLocaleString()}
+          </span>
         </div>
       </div>
 
@@ -75,24 +83,32 @@ function StickyApplyBox() {
             9<span className="sr-only">개</span>
           </strong>
         </button>
-        <button className="flex-8 py-3 bg-[#FDCEDF] text-black rounded-lg cursor-pointer">신청하기</button>
+        {party.status !== 'recruiting' ? (
+          <button className="flex-8 py-3 bg-[#ddd] text-gray-500 rounded-lg cursor-not-allowed">모집완료</button>
+        ) : (
+          <button className="flex-8 py-3 bg-[#FDCEDF] text-black rounded-lg cursor-pointer">신청하기</button>
+        )}
       </div>
     </aside>
   );
 }
 
-function InfoSection({}: {innerHtml: string}) {
-  const [isShow, setIsShow] = useState<boolean>(false);
-  const onMoreContents = () => {
-    setIsShow(true);
-  };
+function InfoSection({party}: {party: Data['party']}) {
+  const [isShow, setIsShow] = useState(false);
+  const onMoreContents = () => setIsShow(true);
 
   return (
     <div className="relative">
       <div
         className={`${isShow ? '' : 'max-h-[600px]'} overflow-hidden`}
         dangerouslySetInnerHTML={{
-          __html: `<div class="IntroduceHtml_introduce__content__IMSCa" style="white-space: pre-wrap;"><p style="text-align: center"><br></p><p style="text-align: center">찬란하지만 외로운 서울살이,</p><p style="text-align: center">인연 혹은 “연인”을 부담없이 만나요!</p><p style="text-align: center">특별한 크리스마스, 미리 같이 즐겨요❤️❤️</p><p style="text-align: center"><br></p><p style="text-align: center"><br></p><p><img class="ql-image image-loaded" src="http://images.munto.kr/production-socialing/1762403818135-photo-jvmyr-1061517-0"></p><p><br></p><p><img class="ql-image image-loaded" src="http://images.munto.kr/production-socialing/1762510610347-photo-7v6jx-1061517-0"></p><p><br></p><p style="text-align: center">&lt;<strong>오늘의메뉴</strong>&gt; </p><p style="text-align: center">배달음식❌, 모두 직접 조리합니다 </p><p style="text-align: center">닭갈비떡볶이</p><p style="text-align: center">참치주먹밥</p><p style="text-align: center">트러플오일감자튀김</p><p style="text-align: center">야채튀김</p><p style="text-align: center">수제 고르곤졸라 +사양벌꿀</p><p style="text-align: center"><strong>“수제 매실주”</strong>,소,맥,탄산</p><p><br></p><p style="text-align: center">-----2차메뉴-----</p><p style="text-align: center">살라미with트러플오일</p><p style="text-align: center">버번위스키&amp;바닐라빈셔벗</p><p style="text-align: center">구운쥐포</p><p style="text-align: center">벨지안와플쿠키</p><p style="text-align: center">참치샐러드카나페</p><p><br></p><p><br></p><p><img class="ql-image image-loaded" src="http://images.munto.kr/production-socialing/1761468305734-photo-5qa6s-1061517-0"></p><p><br></p><p><br></p><p><br></p><p><br></p><p style="text-align: center">부담없이, 친구or인연을 만들 수 있는 소셜링입니다❤️</p><p><br></p><p><br></p><p><br></p></div>`,
+          __html: `<div class="IntroduceHtml_introduce__content__IMSCa" style="white-space: pre-wrap;">
+            <p><strong>설명:</strong> ${party.description}</p>
+            <p><strong>가이드라인:</strong> ${party.guidelines}</p>
+            <p><strong>카테고리:</strong> ${party.category} > ${party.subCategory.join(', ')}</p>
+            <p><strong>참가인원:</strong> ${party.minParticipants} ~ ${party.maxParticipants}명</p>
+            <p><strong>참가비:</strong> ${party.entryFee.toLocaleString()}원</p>
+          </div>`,
         }}
       ></div>
       <Activity mode={isShow ? 'hidden' : 'visible'}>
@@ -109,7 +125,7 @@ function InfoSection({}: {innerHtml: string}) {
   );
 }
 
-function NoticeSection() {
+function NoticeSection({party}: {party: Data['party']}) {
   return (
     <>
       <SectionHeader title="안내사항" subText="자세한 정보를 알려드릴게요" />
@@ -118,23 +134,27 @@ function NoticeSection() {
         <tbody>
           <tr className="border-b border-gray-200">
             <th className="py-2 px-4 w-32 text-gray-600 font-medium">카테고리</th>
-            <td className="py-2 px-4">파티 &gt; 컨셉파티</td>
+            <td className="py-2 px-4">
+              {party.category} &gt; {party.subCategory.join(', ')}
+            </td>
           </tr>
           <tr className="border-b border-gray-200">
             <th className="py-2 px-4 w-32 text-gray-600 font-medium">모집 방식</th>
-            <td className="py-2 px-4">모임형 소셜링 · 승인제 · 공개 모집</td>
+            <td className="py-2 px-4">{party.recruitmentMethod}</td>
           </tr>
           <tr className="border-b border-gray-200">
             <th className="py-2 px-4 w-32 text-gray-600 font-medium">인원수</th>
-            <td className="py-2 px-4">최소 6명 ~ 최대 12명</td>
+            <td className="py-2 px-4">
+              최소 {party.minParticipants}명 ~ 최대 {party.maxParticipants}명
+            </td>
           </tr>
           <tr className="border-b border-gray-200">
             <th className="py-2 px-4 w-32 text-gray-600 font-medium">가격</th>
-            <td className="py-2 px-4">안내사항 참고</td>
+            <td className="py-2 px-4">{party.entryFee.toLocaleString()}원</td>
           </tr>
           <tr className="border-b border-gray-200">
             <th className="py-2 px-4 w-32 text-gray-600 font-medium">장소</th>
-            <td className="py-2 px-4">서울 동작구</td>
+            <td className="py-2 px-4">{party.locationName}</td>
           </tr>
         </tbody>
       </table>
@@ -142,11 +162,23 @@ function NoticeSection() {
   );
 }
 
-function HostSection() {
+function HostSection({party}: {party: Data['party']}) {
   return (
-    <div className="h-[400px]">
+    <div className="border-b border-b-gray-300 pb-4">
       <SectionHeader title="호스트소개" subText="함께 할 호스트를 알려드릴게요." />
-      <div>홍길동</div>
+      <div className="flex items-center gap-4">
+        <img
+          src={
+            party.host.profileImageUrl.includes('example.com') ? '../default-profil.svg' : party.host.profileImageUrl
+          }
+          className="w-16 h-16 rounded-full"
+          alt={party.host.name}
+        />
+        <div>
+          <p className="font-semibold">{party.host.name}</p>
+          <p className="text-stone-500">{party.host.hostIntro}</p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -165,6 +197,7 @@ function ReviewSection() {
 
 export default function PartyDetail() {
   const [activeTab, setActiveTab] = useState('info');
+  const {party} = useData<Data>();
 
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({
     info: null,
@@ -177,13 +210,11 @@ export default function PartyDetail() {
 
   useEffect(() => {
     if (!tabRef.current) return;
-
     const tabHeight = tabRef.current.offsetHeight;
 
     const observer = new IntersectionObserver(
       entries => {
         const intersecting = entries.filter(e => e.isIntersecting);
-
         if (intersecting.length > 0) {
           const topMost = intersecting.reduce((a, b) => (a.boundingClientRect.top < b.boundingClientRect.top ? a : b));
           setActiveTab(topMost.target.id);
@@ -191,11 +222,7 @@ export default function PartyDetail() {
           setActiveTab('info');
         }
       },
-      {
-        root: null,
-        rootMargin: `-${tabHeight}px 0px 0px 0px`,
-        threshold: 0,
-      }
+      {root: null, rootMargin: `-${tabHeight}px 0px 0px 0px`, threshold: 0}
     );
 
     Object.values(sectionRefs.current).forEach(el => el && observer.observe(el));
@@ -206,24 +233,20 @@ export default function PartyDetail() {
     const el = sectionRefs.current[id];
     if (el && tabRef.current) {
       const tabHeight = tabRef.current.offsetHeight;
-      window.scrollTo({
-        top: el.offsetTop - tabHeight,
-        behavior: 'smooth',
-      });
+      window.scrollTo({top: el.offsetTop - tabHeight, behavior: 'smooth'});
       setActiveTab(id);
     }
   };
 
   return (
     <div className="relative md:grid grid-cols-[3fr_7fr] gap-14 container">
-      <StickyApplyBox />
+      <StickyApplyBox party={party} />
 
       <section>
-        <img src="/dummy.png" className="w-full rounded-2xl mb-8" />
+        <img src="https://picsum.photos/400/300?random=1" className="w-full rounded-2xl mb-8" />
 
         <Tabs tabs={TABS} activeTab={activeTab} onClick={handleTabClick} tabRef={tabRef} />
 
-        {/* 실제 섹션 */}
         <div className="space-y-8">
           <section
             id="info"
@@ -232,7 +255,7 @@ export default function PartyDetail() {
               sectionRefs.current.info = el;
             }}
           >
-            <InfoSection innerHtml={''} />
+            <InfoSection party={party} />
           </section>
 
           <section
@@ -242,7 +265,7 @@ export default function PartyDetail() {
               sectionRefs.current.notice = el;
             }}
           >
-            <NoticeSection />
+            <NoticeSection party={party} />
           </section>
 
           <section
@@ -252,7 +275,7 @@ export default function PartyDetail() {
               sectionRefs.current.host = el;
             }}
           >
-            <HostSection />
+            <HostSection party={party} />
           </section>
 
           <section

@@ -1,36 +1,65 @@
 import type {PageContextServer} from 'vike/types';
 import {useConfig} from 'vike-react/useConfig';
 
-export type Movie = {
-  id: string;
+// Host 정보 타입
+export type Host = {
+  id: number;
+  name: string;
+  profileImageUrl: string;
+  hostIntro: string;
+};
+
+// Party 타입
+export type PartyDetail = {
+  partyId: number;
   title: string;
-  release_date: string;
+  description: string;
+  guidelines: string;
+  category: string;
+  subCategory: string[];
+  partyDatetime: string;
+  locationName: string;
+  locationAddress: string;
+  latitude: number;
+  longitude: number;
+  minParticipants: number;
+  maxParticipants: number;
+  recruitmentMethod: string;
+  entryFee: number;
+  tags: string[];
+  status: string;
+  host: Host;
+  hostQuestion: string | null;
 };
 
-export type MovieDetails = Movie & {
-  director: string;
-  producer: string;
+export type Data = {
+  party: PartyDetail;
 };
-
-export type Data = Awaited<ReturnType<typeof data>>;
 
 export async function data(pageContext: PageContextServer) {
   const config = useConfig();
+  const cookie = pageContext.headers?.cookie ?? '';
+  const token = cookie
+    .split('; ')
+    .find(c => c.startsWith('token='))
+    ?.split('=')[1];
 
-  const response = await fetch(`https://brillout.github.io/star-wars/api/films/${pageContext.routeParams.id}.json`);
-  let movie = (await response.json()) as MovieDetails;
+  const backendUrl = 'http://13.124.46.70:8080/api/v1';
+  const partyId = pageContext.routeParams.id;
 
-  config({
-    // Set <title>
-    title: `Mingleup | 익명보장 즉석만남`,
+  const response = await fetch(`${backendUrl}/parties/${partyId}`, {
+    headers: {
+      Authorization: `Bearer ${token ?? ''}`,
+    },
   });
 
-  movie = minimize(movie);
+  const json = await response.json();
 
-  return {movie};
-}
+  const partyTitle = json?.result?.title ?? '파티상세';
 
-function minimize(movie: MovieDetails): MovieDetails {
-  const {id, title, release_date, director, producer} = movie;
-  return {id, title, release_date, director, producer};
+  config({
+    title: `Mingleup | ${partyTitle}`,
+  });
+
+  return {party: json.result};
 }

@@ -49,7 +49,7 @@ export default function Page() {
           </div>
 
           <div>
-            <PartyList />
+            <PartyList serch={{keyworld: '모임'}} />
           </div>
         </div>
       </section>
@@ -74,7 +74,7 @@ export default function Page() {
           </div>
 
           <div>
-            <PartyList />
+            <PartyList serch={{keyworld: '호스트'}} />
           </div>
         </div>
       </section>
@@ -99,7 +99,7 @@ export default function Page() {
           </div>
 
           <div>
-            <PartyList />
+            <PartyList serch={{keyworld: '게임'}} />
           </div>
         </div>
       </section>
