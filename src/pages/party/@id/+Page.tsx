@@ -1,6 +1,8 @@
 import {Activity, useEffect, useRef, useState} from 'react';
 import {useData} from 'vike-react/useData';
+import {navigate} from 'vike/client/router';
 import type {Data} from './+data.js';
+import {usePopup} from '../../../components/popup/usePopup.js';
 
 const TABS = [
   {id: 'info', label: '정보'},
@@ -51,6 +53,7 @@ function Tabs({tabs, activeTab, onClick, tabRef}: TabsProps) {
 }
 
 function StickyApplyBox({party}: {party: Data['party']}) {
+  const {form} = usePopup();
   return (
     <aside className="sticky hidden md:block top-22 h-fit">
       <h2 className="sr-only">파티 신청하기 영역</h2>
@@ -86,7 +89,48 @@ function StickyApplyBox({party}: {party: Data['party']}) {
         {party.status !== 'recruiting' ? (
           <button className="flex-8 py-3 bg-[#ddd] text-gray-500 rounded-lg cursor-not-allowed">모집완료</button>
         ) : (
-          <button className="flex-8 py-3 bg-[#FDCEDF] text-black rounded-lg cursor-pointer">신청하기</button>
+          <button
+            className="flex-8 py-3 bg-[#FDCEDF] text-black rounded-lg cursor-pointer"
+            onClick={() => {
+              form<{
+                agree?: 'on';
+              }>({
+                header: {
+                  title: '신청하기 전에!',
+                  close: true,
+                },
+                form: (
+                  <>
+                    <p className="mb-4">모두가 즐거운 모임이 될 수 있도록 꼭 확인해 주세요!</p>
+                    <ol className="flex flex-col mb-4 gap-2 ">
+                      <li className="text-sm">
+                        1. 모임 시작 전 부득이하게 참여가 어려워진 경우, 반드시 호스트에게 미리 알려주세요.
+                      </li>
+                      <li className="text-sm">
+                        2. 무단으로 불참하거나, 함께하는 멤버들에게 피해를 주는 경우 이용 제재를 받게 돼요.
+                      </li>
+                      <li className="text-sm">
+                        3. 호스트가 제공하는 얼리버드 할인 혜택은 정상적으로 모임 참여를 완료해야 제공돼요.
+                      </li>
+                    </ol>
+                    <div className="flex flex-row-reverse justify-end gap-2 mb-8 p-2 bg-[#FAEBED] rounded-md">
+                      <label htmlFor="agreement" className="text-sm">
+                        소셜링 이용 규칙을 잘 지킬게요!
+                      </label>
+                      <input id="agreement" name="agree" type="checkbox" defaultChecked />
+                    </div>
+                  </>
+                ),
+                onSubmit(data) {
+                  if (data.agree) {
+                    navigate('/party/accession', {pageContext: {party}});
+                  }
+                },
+              });
+            }}
+          >
+            신청하기
+          </button>
         )}
       </div>
     </aside>
