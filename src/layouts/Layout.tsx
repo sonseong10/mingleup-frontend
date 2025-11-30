@@ -150,7 +150,9 @@ function Footer() {
           </div>
           <ul className="flex text-gray-600 text-sm">
             <li className="after:content-['|'] after:mx-1">이용약관</li>
-            <li>개인정보 처리방침</li>
+            <li>
+              <a href="/policy">개인정보 처리방침</a>
+            </li>
           </ul>
         </div>
         <div>

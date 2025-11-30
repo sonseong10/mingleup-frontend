@@ -36,7 +36,16 @@ function LoginForm() {
 
       <div className="w-full max-w-md mx-auto">
         {isActive === 'member' ? (
-          <KakaoLogin />
+          <>
+            <KakaoLogin />
+            <p className="text-sm text-center text-gray-500 mt-4">
+              회원가입 하는 경우
+              <a href="/policy" className="underline">
+                개인정보처리방침
+              </a>
+              약관에 동의함을 간주합니다.
+            </p>
+          </>
         ) : (
           <p className="p-4 bg-gray-100 text-center rounded-xl text-gray-500">
             호스트 가입은 곧 출시될 예정입니다.
