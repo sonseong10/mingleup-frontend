@@ -7,6 +7,7 @@ import FooterLogo from '../assets/images/footer_logo.svg';
 import {Link} from '../components/Link';
 import PopupComponent from '../components/popup/Popup';
 import {useEffect, useState} from 'react';
+import {ToastContainer} from '../components/toast/ToastContainer';
 
 export function parseJwt(token: string) {
   try {
@@ -59,6 +60,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
       <Content>{children}</Content>
       <Footer />
       <PopupComponent />
+      <ToastContainer />
     </>
   );
 }

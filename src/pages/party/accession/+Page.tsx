@@ -2,10 +2,21 @@ import {useState} from 'react';
 import Button from '../../../components/button/Button';
 import {usePageContext} from 'vike-react/usePageContext';
 import Http from '../../../utils/HTTP';
+import {navigate} from 'vike/client/router';
+import {useToastStore} from '../../../store/toastStore';
+
+interface IResParty {
+  answerText: string;
+  applicationId: number;
+  partyId: number;
+  status: 'PENDING';
+  userId: number;
+}
 
 function PartyAccession() {
   const [answer, setAnswer] = useState<string>('');
   const {party} = usePageContext();
+  const addToast = useToastStore.getState().addToast;
 
   // console.log(party);
 
@@ -16,10 +27,10 @@ function PartyAccession() {
     if (!token) return null;
 
     try {
-      const res = await Http.post(
+      const res = await Http.post<IResParty>(
         `parties/${party.partyId}/applications`,
         {
-          answer: '분위기 좋게 함께 즐기고 싶어요!',
+          answer: answer,
         },
         {
           headers: {
@@ -28,7 +39,10 @@ function PartyAccession() {
         }
       );
 
-      console.log(res);
+      if (res) {
+        addToast('작업이 완료되었습니다.');
+        navigate('/');
+      }
     } catch (error) {}
   };
 
