@@ -3,6 +3,7 @@ import {useData} from 'vike-react/useData';
 import {navigate} from 'vike/client/router';
 import type {Data} from './+data.js';
 import {usePopup} from '../../../components/popup/usePopup.js';
+import Http from '../../../utils/HTTP.js';
 
 const TABS = [
   {id: 'info', label: '정보'},
@@ -53,7 +54,38 @@ function Tabs({tabs, activeTab, onClick, tabRef}: TabsProps) {
 }
 
 function StickyApplyBox({party}: {party: Data['party']}) {
+  const [wishParty, setWishParty] = useState(false);
   const {form, alert} = usePopup();
+
+  const getWishList = () => {
+    const raw = localStorage.getItem('wishList');
+    return raw ? (JSON.parse(raw) as number[]) : [];
+  };
+
+  useEffect(() => {
+    const list = getWishList();
+    setWishParty(list.includes(party.partyId));
+  }, [party.partyId]);
+
+  const onAddWish = async () => {
+    const list = getWishList();
+
+    if (wishParty) {
+      const newList = list.filter(id => id !== party.partyId);
+      localStorage.setItem('wishList', JSON.stringify(newList));
+
+      await Http.delete(`${party.partyId}`); // 백엔드 API에 맞게 수정
+      setWishParty(false);
+    } else {
+      // 찜 추가
+      const newList = [...list, party.partyId];
+      localStorage.setItem('wishList', JSON.stringify(newList));
+
+      await Http.post(`${party.partyId}`, {}); // 백엔드 API에 맞게 수정
+      setWishParty(true);
+    }
+  };
+
   return (
     <aside className="sticky hidden md:block top-22 h-fit">
       <h2 className="sr-only">파티 신청하기 영역</h2>
@@ -76,46 +108,39 @@ function StickyApplyBox({party}: {party: Data['party']}) {
       </div>
 
       <div className="flex gap-2">
-        <button className="flex-2 w-full flex gap-2 items-center justify-center px-4 py-3 bg-white text-black border rounded-lg cursor-pointer border-[#999]">
+        <button
+          aria-label="찜목록 추가"
+          className={`flex-1 w-full flex gap-2 items-center justify-center px-4 py-3 bg-white text-black border rounded-lg cursor-pointer ${wishParty ? 'border-[#EB3223]' : 'border-[#999]'}`}
+          onClick={onAddWish}
+        >
           <i
             aria-hidden
             className="block w-6 h-6 bg-no-repeat bg-center"
-            style={{backgroundImage: `url("${Like('#999')}")`}}
+            style={{
+              backgroundImage: `url("${wishParty ? Like('#EB3223') : Like('#999')}")`,
+            }}
           ></i>
-          <strong className="text-[#999] font-normal">
-            9<span className="sr-only">개</span>
-          </strong>
         </button>
+
+        {/* 모집 상태 */}
         {party.status !== 'recruiting' ? (
           <button className="flex-8 py-3 bg-[#ddd] text-gray-500 rounded-lg cursor-not-allowed">모집완료</button>
         ) : (
           <button
-            className="flex-8 py-3 bg-[#FDCEDF] text-black rounded-lg cursor-pointer"
+            className="flex-9 py-3 bg-[#FDCEDF] text-black rounded-lg cursor-pointer"
             onClick={() => {
-              if (typeof window === null) return;
               const auth = localStorage.getItem('name');
 
               if (auth) {
-                form<{
-                  agree?: 'on';
-                }>({
-                  header: {
-                    title: '신청하기 전에!',
-                    close: true,
-                  },
+                form<{agree?: 'on'}>({
+                  header: {title: '신청하기 전에!', close: true},
                   form: (
                     <>
                       <p className="mb-4">모두가 즐거운 모임이 될 수 있도록 꼭 확인해 주세요!</p>
-                      <ol className="flex flex-col mb-4 gap-2 ">
-                        <li className="text-sm">
-                          1. 모임 시작 전 부득이하게 참여가 어려워진 경우, 반드시 호스트에게 미리 알려주세요.
-                        </li>
-                        <li className="text-sm">
-                          2. 무단으로 불참하거나, 함께하는 멤버들에게 피해를 주는 경우 이용 제재를 받게 돼요.
-                        </li>
-                        <li className="text-sm">
-                          3. 호스트가 제공하는 얼리버드 할인 혜택은 정상적으로 모임 참여를 완료해야 제공돼요.
-                        </li>
+                      <ol className="flex flex-col mb-4 gap-2">
+                        <li className="text-sm">1. 참여가 어려워진 경우 반드시 호스트에게 미리 알려주세요.</li>
+                        <li className="text-sm">2. 무단 불참 시 이용 제재를 받을 수 있어요.</li>
+                        <li className="text-sm">3. 얼리버드 할인은 모임 정상 참여 시 제공돼요.</li>
                       </ol>
                       <div className="flex flex-row-reverse justify-end gap-2 mb-8 p-2 bg-[#FAEBED] rounded-md">
                         <label htmlFor="agreement" className="text-sm">
@@ -132,7 +157,10 @@ function StickyApplyBox({party}: {party: Data['party']}) {
                   },
                 });
               } else {
-                alert({header: {title: '로그인이 필요합니다.'}, message: '파티에 참여하기 위해 로그인이 필요해요.'});
+                alert({
+                  header: {title: '로그인이 필요합니다.'},
+                  message: '파티에 참여하기 위해 로그인이 필요해요.',
+                });
               }
             }}
           >
@@ -143,6 +171,7 @@ function StickyApplyBox({party}: {party: Data['party']}) {
     </aside>
   );
 }
+
 
 function InfoSection({party}: {party: Data['party']}) {
   const [isShow, setIsShow] = useState(false);
