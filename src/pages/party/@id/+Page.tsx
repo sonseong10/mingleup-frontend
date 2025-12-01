@@ -323,7 +323,7 @@ export default function PartyDetail() {
       <StickyApplyBox party={party} />
 
       <section>
-        <img src="https://picsum.photos/400/300?random=1" className="w-full rounded-2xl mb-8" />
+        {/* <img src="https://picsum.photos/400/300?random=1" className="w-full rounded-2xl mb-8" /> */}
 
         <Tabs tabs={TABS} activeTab={activeTab} onClick={handleTabClick} tabRef={tabRef} />
 

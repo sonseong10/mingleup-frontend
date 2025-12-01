@@ -13,7 +13,7 @@ function PartyItem({party}: IPartyProps) {
   const {title, category, status, partyId} = party;
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const imgUrl = `https://picsum.photos/300/200?random=${Math.random()}`;
+  const imgUrl = party.partyImageUrl;
 
   return (
     <li className="bg-white overflow-hidden flex flex-col">

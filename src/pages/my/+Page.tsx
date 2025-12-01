@@ -109,7 +109,6 @@ const statusColor = {
   ATTENDED: 'bg-blue-100 text-blue-700',
 } as const;
 
-const imgUrl = `https://picsum.photos/300/200?random=${Math.random()}`;
 
 function MyWishListt() {
   const [wishList, setWishList] = useState<IResWishList>();
@@ -213,7 +212,7 @@ function MyWishListt() {
                           {!isLoaded && <div className="absolute inset-0 animate-pulse bg-gray-300" />}
 
                           <img
-                            src={imgUrl}
+                            src={party.partyImageUrl}
                             alt={party.partyTitle}
                             className={`w-full h-full object-cover transition-opacity duration-500 ${
                               isLoaded ? 'opacity-100' : 'opacity-0'
@@ -287,7 +286,7 @@ function MyWishListt() {
                       {!isLoaded && <div className="absolute inset-0 animate-pulse bg-gray-300" />}
 
                       <img
-                        src={imgUrl}
+                        src={party.partyImageUrl}
                         alt={party.partyTitle}
                         className={`w-full h-full object-cover transition-opacity duration-500 ${
                           isLoaded ? 'opacity-100' : 'opacity-0'
